@@ -1,0 +1,1055 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطالب</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            direction: rtl;
+            color: #e0e0e0;
+        }
+
+        /* صفحة المصادقة */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #1e1e2e;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #333;
+        }
+
+        .auth-card h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a8cff;
+            font-size: 28px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            color: #aaa;
+        }
+
+        .tab-btn.active {
+            color: #4a8cff;
+            border-bottom: 3px solid #4a8cff;
+            font-weight: bold;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ccc;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #2d2d3d;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            color: #e0e0e0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4a8cff;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4a8cff 0%, #2a5cb0 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #5a9cff 0%, #3a6cc0 100%);
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: #333;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #1a472a;
+            color: #4ade80;
+            border: 1px solid #2d5a3d;
+        }
+
+        .message.error {
+            background: #5c2b3a;
+            color: #f87171;
+            border: 1px solid #6d3a4a;
+        }
+
+        .message.info {
+            background: #1e3a5f;
+            color: #60a5fa;
+            border: 1px solid #2e4a6f;
+        }
+
+        /* الصفحة الرئيسية */
+        .dashboard {
+            min-height: 100vh;
+            background: #0f0f1a;
+        }
+
+        .header {
+            background: #1a1a2e;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .header h1 {
+            color: #4a8cff;
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-content h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a8cff;
+            font-size: 32px;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: #1e1e2e;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #333;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-color: #4a8cff;
+        }
+
+        .subject-card h3 {
+            color: #4a8cff;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .subject-card p {
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-actions {
+            text-align: left;
+        }
+
+        /* إدارة المحتوى */
+        .admin-panel {
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .admin-panel h3 {
+            color: #4a8cff;
+            margin-bottom: 15px;
+        }
+
+        .folder-management {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .folder-item {
+            background: #2d2d3d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .folder-item h4 {
+            color: #4a8cff;
+            margin-bottom: 10px;
+        }
+
+        .folder-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .folder-content {
+            margin-top: 10px;
+            padding: 10px;
+            background: #1e1e2e;
+            border-radius: 5px;
+        }
+
+        .content-item {
+            background: #2d2d3d;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* responsive */
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .folder-management {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- المحتوى هيظهر هنا ديناميكي -->
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBK6FZF3LW83qaUHBKYTfiVd2Ozrd1Rf2g",
+            authDomain: "thanawy-1383.firebaseapp.com",
+            projectId: "thanawy-1383",
+            storageBucket: "thanawy-1383.firebasestorage.app",
+            messagingSenderId: "1026664406457",
+            appId: "1:1026664406457:web:546440a738ca05eda0aa68",
+            measurementId: "G-MXETCQM4QK"
+        };
+
+        // Firebase imports (using CDN)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc,
+            updateDoc,
+            deleteDoc,
+            collection,
+            getDocs,
+            addDoc
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        class StudentPortal {
+            constructor() {
+                this.currentUser = null;
+                this.userData = null;
+                this.init();
+            }
+
+            init() {
+                // نتأكد من حالة المستخدم
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        this.currentUser = user;
+                        this.loadUserData();
+                    } else {
+                        this.showLoginPage();
+                    }
+                });
+            }
+
+            // عرض صفحة التسجيل
+            showLoginPage() {
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="auth-container">
+                        <div class="auth-card">
+                            <h1>بوابة الطالب</h1>
+                            
+                            <div class="tabs">
+                                <button class="tab-btn active" data-tab="login">تسجيل الدخول</button>
+                                <button class="tab-btn" data-tab="signup">إنشاء حساب جديد</button>
+                            </div>
+
+                            <!-- نموذج تسجيل الدخول -->
+                            <form id="loginForm" class="auth-form active">
+                                <div class="form-group">
+                                    <label for="loginUsername">اسم المستخدم:</label>
+                                    <input type="text" id="loginUsername" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPassword">كلمة المرور:</label>
+                                    <input type="password" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn-primary">تسجيل الدخول</button>
+                            </form>
+
+                            <!-- نموذج إنشاء حساب -->
+                            <form id="signupForm" class="auth-form">
+                                <div class="form-group">
+                                    <label for="signupUsername">اسم المستخدم:</label>
+                                    <input type="text" id="signupUsername" pattern="[A-Za-z0-9_]+" 
+                                           title="فقط حروف إنجليزية، أرقام، والعلامة _" required>
+                                    <small>فقط حروف إنجليزية، أرقام، والعلامة _</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="signupPassword">كلمة المرور:</label>
+                                    <input type="password" id="signupPassword" pattern="[A-Za-z0-9]{6,}" 
+                                           title="6 أحرف على الأقل (حروف إنجليزية وأرقام فقط)" required>
+                                    <small>6 أحرف على الأقل (حروف إنجليزية وأرقام فقط)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="specialization">التخصص:</label>
+                                    <select id="specialization" required>
+                                        <option value="">اختر التخصص</option>
+                                        <option value="science">علمي علوم</option>
+                                        <option value="math">علمي رياضة</option>
+                                        <option value="literary">أدبي</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-primary">إنشاء حساب</button>
+                            </form>
+
+                            <div id="authMessage" class="message"></div>
+                        </div>
+                    </div>
+                `;
+
+                this.setupAuthEvents();
+            }
+
+            // إعداد أحداث النماذج
+            setupAuthEvents() {
+                // تبديل بين التبويبات
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+                        
+                        e.target.classList.add('active');
+                        document.getElementById(e.target.dataset.tab + 'Form').classList.add('active');
+                    });
+                });
+
+                // تسجيل الدخول
+                document.getElementById('loginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                // إنشاء حساب
+                document.getElementById('signupForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSignup();
+                });
+            }
+
+            // معالجة تسجيل الدخول
+            async handleLogin() {
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                const messageDiv = document.getElementById('authMessage');
+
+                // التحقق من المستخدمين الخاصين
+                if (username === 'admin' && password === '123432') {
+                    // تسجيل دخول كمسؤول
+                    try {
+                        // محاولة تسجيل الدخول باستخدام بريد افتراضي
+                        await signInWithEmailAndPassword(auth, 'admin@thanawy.com', '123432');
+                        messageDiv.textContent = 'تم تسجيل الدخول كمسؤول بنجاح!';
+                        messageDiv.className = 'message success';
+                    } catch (error) {
+                        // إذا فشل، ننشئ حساب المسؤول
+                        await this.createAdminAccount();
+                        messageDiv.textContent = 'تم تسجيل الدخول كمسؤول بنجاح!';
+                        messageDiv.className = 'message success';
+                    }
+                    return;
+                }
+
+                if (username === 'owner' && password === '13831383') {
+                    // تسجيل دخول كمالك
+                    try {
+                        await signInWithEmailAndPassword(auth, 'owner@thanawy.com', '13831383');
+                        messageDiv.textContent = 'تم تسجيل الدخول كمالك بنجاح!';
+                        messageDiv.className = 'message success';
+                    } catch (error) {
+                        await this.createOwnerAccount();
+                        messageDiv.textContent = 'تم تسجيل الدخول كمالك بنجاح!';
+                        messageDiv.className = 'message success';
+                    }
+                    return;
+                }
+
+                try {
+                    messageDiv.textContent = 'جاري تسجيل الدخول...';
+                    messageDiv.className = 'message info';
+
+                    // البحث عن المستخدم باستخدام اسم المستخدم
+                    const userEmail = await this.getUserEmailByUsername(username);
+                    
+                    if (!userEmail) {
+                        messageDiv.textContent = 'اسم المستخدم غير موجود';
+                        messageDiv.className = 'message error';
+                        return;
+                    }
+
+                    await signInWithEmailAndPassword(auth, userEmail, password);
+                    messageDiv.textContent = 'تم تسجيل الدخول بنجاح!';
+                    messageDiv.className = 'message success';
+                } catch (error) {
+                    messageDiv.textContent = this.getAuthErrorMessage(error.code);
+                    messageDiv.className = 'message error';
+                }
+            }
+
+            // إنشاء حساب المسؤول
+            async createAdminAccount() {
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, 'admin@thanawy.com', '123432');
+                    const user = userCredential.user;
+                    
+                    await setDoc(doc(db, 'users', user.uid), {
+                        username: 'admin',
+                        email: 'admin@thanawy.com',
+                        specialization: 'admin',
+                        role: 'admin',
+                        createdAt: new Date()
+                    });
+                } catch (error) {
+                    console.error('Error creating admin account:', error);
+                }
+            }
+
+            // إنشاء حساب المالك
+            async createOwnerAccount() {
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, 'owner@thanawy.com', '13831383');
+                    const user = userCredential.user;
+                    
+                    await setDoc(doc(db, 'users', user.uid), {
+                        username: 'owner',
+                        email: 'owner@thanawy.com',
+                        specialization: 'owner',
+                        role: 'owner',
+                        createdAt: new Date()
+                    });
+                } catch (error) {
+                    console.error('Error creating owner account:', error);
+                }
+            }
+
+            // البحث عن البريد الإلكتروني باستخدام اسم المستخدم
+            async getUserEmailByUsername(username) {
+                try {
+                    const usersSnapshot = await getDocs(collection(db, 'users'));
+                    let userEmail = null;
+                    
+                    usersSnapshot.forEach(doc => {
+                        const userData = doc.data();
+                        if (userData.username === username) {
+                            userEmail = userData.email;
+                        }
+                    });
+                    
+                    return userEmail;
+                } catch (error) {
+                    console.error('Error getting user email:', error);
+                    return null;
+                }
+            }
+
+            // التحقق من وجود اسم مستخدم
+            async isUsernameTaken(username) {
+                try {
+                    const usersSnapshot = await getDocs(collection(db, 'users'));
+                    let taken = false;
+                    
+                    usersSnapshot.forEach(doc => {
+                        const userData = doc.data();
+                        if (userData.username === username) {
+                            taken = true;
+                        }
+                    });
+                    
+                    return taken;
+                } catch (error) {
+                    console.error('Error checking username:', error);
+                    return false;
+                }
+            }
+
+            // معالجة إنشاء حساب
+            async handleSignup() {
+                const username = document.getElementById('signupUsername').value;
+                const password = document.getElementById('signupPassword').value;
+                const specialization = document.getElementById('specialization').value;
+                const messageDiv = document.getElementById('authMessage');
+
+                // التحقق من صحة اسم المستخدم
+                if (!/^[A-Za-z0-9_]+$/.test(username)) {
+                    messageDiv.textContent = 'اسم المستخدم يجب أن يحتوي فقط على حروف إنجليزية، أرقام، والعلامة _';
+                    messageDiv.className = 'message error';
+                    return;
+                }
+
+                // التحقق من عدم استخدام اسم مستخدم محجوز
+                if (username === 'admin' || username === 'owner') {
+                    messageDiv.textContent = 'اسم المستخدم محجوز، الرجاء اختيار اسم آخر';
+                    messageDiv.className = 'message error';
+                    return;
+                }
+
+                // التحقق من عدم وجود اسم المستخدم مسبقاً
+                const isTaken = await this.isUsernameTaken(username);
+                if (isTaken) {
+                    messageDiv.textContent = 'اسم المستخدم موجود مسبقاً، الرجاء اختيار اسم آخر';
+                    messageDiv.className = 'message error';
+                    return;
+                }
+
+                try {
+                    messageDiv.textContent = 'جاري إنشاء الحساب...';
+                    messageDiv.className = 'message info';
+
+                    // إنشاء بريد إلكتروني فريد بناءً على اسم المستخدم
+                    const email = `${username}@thanawy.com`;
+
+                    // إنشاء المستخدم في Authentication
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    // حفظ بيانات إضافية في Firestore
+                    await setDoc(doc(db, 'users', user.uid), {
+                        username: username,
+                        email: email,
+                        specialization: specialization,
+                        role: 'student',
+                        createdAt: new Date()
+                    });
+
+                    messageDiv.textContent = 'تم إنشاء الحساب بنجاح!';
+                    messageDiv.className = 'message success';
+                } catch (error) {
+                    messageDiv.textContent = this.getAuthErrorMessage(error.code);
+                    messageDiv.className = 'message error';
+                }
+            }
+
+            // تحميل بيانات المستخدم
+            async loadUserData() {
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
+                    if (userDoc.exists()) {
+                        this.userData = userDoc.data();
+                        this.showDashboard();
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                }
+            }
+
+            // عرض الصفحة الرئيسية
+            async showDashboard() {
+                const app = document.getElementById('app');
+                
+                // المواد حسب التخصص
+                const subjects = this.getSubjectsBySpecialization(this.userData.specialization);
+                
+                // تحميل المجلدات والمحتوى
+                const folders = await this.loadFolders();
+                
+                app.innerHTML = `
+                    <div class="dashboard">
+                        <header class="header">
+                            <h1>مرحباً ${this.userData.username} 👋</h1>
+                            <div class="user-info">
+                                <span>${this.getRoleDisplay()}</span>
+                                <button id="logoutBtn" class="btn-secondary">تسجيل الخروج</button>
+                            </div>
+                        </header>
+
+                        <main class="main-content">
+                            ${this.userData.role === 'admin' || this.userData.role === 'owner' ? this.renderAdminPanel(folders) : ''}
+                            
+                            <h2>موادك الدراسية</h2>
+                            <div class="subjects-grid">
+                                ${subjects.map(subject => `
+                                    <div class="subject-card">
+                                        <h3>${subject.name}</h3>
+                                        <p>${subject.description}</p>
+                                        <div class="card-actions">
+                                            <button class="btn-primary" data-subject="${subject.name}">الدخول للمادة</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </main>
+                    </div>
+                `;
+
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+
+                // إضافة أحداث للأزرار
+                document.querySelectorAll('.btn-primary[data-subject]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const subject = e.target.dataset.subject;
+                        this.showSubjectContent(subject, folders);
+                    });
+                });
+
+                // إضافة أحداث لوحة الإدارة
+                if (this.userData.role === 'admin' || this.userData.role === 'owner') {
+                    this.setupAdminEvents();
+                }
+            }
+
+            // عرض محتوى المادة
+            showSubjectContent(subjectName, folders) {
+                const subjectFolders = folders.filter(folder => folder.subject === subjectName);
+                
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="dashboard">
+                        <header class="header">
+                            <h1>${subjectName}</h1>
+                            <div class="user-info">
+                                <button id="backBtn" class="btn-secondary">العودة للرئيسية</button>
+                                <button id="logoutBtn" class="btn-secondary">تسجيل الخروج</button>
+                            </div>
+                        </header>
+
+                        <main class="main-content">
+                            ${this.userData.role === 'admin' || this.userData.role === 'owner' ? this.renderAdminPanel(folders, subjectName) : ''}
+                            
+                            <h2>محتوى ${subjectName}</h2>
+                            <div class="folder-management">
+                                ${subjectFolders.map(folder => this.renderFolder(folder)).join('')}
+                            </div>
+                        </main>
+                    </div>
+                `;
+
+                document.getElementById('backBtn').addEventListener('click', () => {
+                    this.showDashboard();
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+
+                // إعداد أحداث لوحة الإدارة إذا كان المستخدم مسؤولاً
+                if (this.userData.role === 'admin' || this.userData.role === 'owner') {
+                    this.setupAdminEvents();
+                }
+            }
+
+            // عرض المجلد
+            renderFolder(folder) {
+                return `
+                    <div class="folder-item" data-folder-id="${folder.id}">
+                        <h4>${folder.name}</h4>
+                        ${this.userData.role === 'admin' || this.userData.role === 'owner' ? `
+                            <div class="folder-actions">
+                                <button class="btn-secondary edit-folder">تعديل</button>
+                                <button class="btn-secondary delete-folder">حذف</button>
+                                <button class="btn-primary add-content">إضافة محتوى</button>
+                            </div>
+                        ` : ''}
+                        <div class="folder-content">
+                            ${folder.content ? folder.content.map(item => this.renderContentItem(item)).join('') : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // عرض عنصر المحتوى
+            renderContentItem(item) {
+                let contentHtml = '';
+                
+                if (item.type === 'folder') {
+                    contentHtml = `<span>📁 ${item.name}</span>`;
+                } else if (item.type === 'video') {
+                    contentHtml = `<span>🎥 ${item.name}</span> <a href="${item.url}" target="_blank">(رابط)</a>`;
+                } else if (item.type === 'link') {
+                    contentHtml = `<span>🔗 ${item.name}</span> <a href="${item.url}" target="_blank">(رابط)</a>`;
+                }
+                
+                return `
+                    <div class="content-item">
+                        ${contentHtml}
+                        ${this.userData.role === 'admin' || this.userData.role === 'owner' ? `
+                            <div class="content-actions">
+                                <button class="btn-secondary edit-content" data-item-id="${item.id}">تعديل</button>
+                                <button class="btn-secondary delete-content" data-item-id="${item.id}">حذف</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // عرض لوحة الإدارة
+            renderAdminPanel(folders, currentSubject = '') {
+                const subjects = this.getSubjectsList();
+                
+                return `
+                    <div class="admin-panel">
+                        <h3>لوحة الإدارة</h3>
+                        <div class="form-group">
+                            <label for="adminSubject">المادة:</label>
+                            <select id="adminSubject">
+                                <option value="">اختر المادة</option>
+                                ${subjects.map(subject => 
+                                    `<option value="${subject}" ${currentSubject === subject ? 'selected' : ''}>${subject}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="folderName">اسم المجلد:</label>
+                            <input type="text" id="folderName" placeholder="أدخل اسم المجلد">
+                        </div>
+                        <button id="addFolderBtn" class="btn-primary">إضافة مجلد</button>
+                    </div>
+                `;
+            }
+
+            // إعداد أحداث لوحة الإدارة
+            setupAdminEvents() {
+                // إضافة مجلد
+                document.getElementById('addFolderBtn').addEventListener('click', () => {
+                    this.addFolder();
+                });
+
+                // تعديل مجلد
+                document.querySelectorAll('.edit-folder').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const folderId = e.target.closest('.folder-item').dataset.folderId;
+                        this.editFolder(folderId);
+                    });
+                });
+
+                // حذف مجلد
+                document.querySelectorAll('.delete-folder').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const folderId = e.target.closest('.folder-item').dataset.folderId;
+                        this.deleteFolder(folderId);
+                    });
+                });
+
+                // إضافة محتوى
+                document.querySelectorAll('.add-content').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const folderId = e.target.closest('.folder-item').dataset.folderId;
+                        this.showAddContentModal(folderId);
+                    });
+                });
+
+                // تعديل محتوى
+                document.querySelectorAll('.edit-content').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const itemId = e.target.dataset.itemId;
+                        this.editContent(itemId);
+                    });
+                });
+
+                // حذف محتوى
+                document.querySelectorAll('.delete-content').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const itemId = e.target.dataset.itemId;
+                        this.deleteContent(itemId);
+                    });
+                });
+            }
+
+            // إضافة مجلد
+            async addFolder() {
+                const subject = document.getElementById('adminSubject').value;
+                const name = document.getElementById('folderName').value;
+
+                if (!subject || !name) {
+                    alert('الرجاء اختيار المادة وإدخال اسم المجلد');
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, 'folders'), {
+                        subject: subject,
+                        name: name,
+                        content: [],
+                        createdAt: new Date()
+                    });
+
+                    alert('تم إضافة المجلد بنجاح');
+                    this.showDashboard();
+                } catch (error) {
+                    console.error('Error adding folder:', error);
+                    alert('حدث خطأ أثناء إضافة المجلد');
+                }
+            }
+
+            // تحميل المجلدات
+            async loadFolders() {
+                try {
+                    const foldersSnapshot = await getDocs(collection(db, 'folders'));
+                    const folders = [];
+                    
+                    foldersSnapshot.forEach(doc => {
+                        folders.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    return folders;
+                } catch (error) {
+                    console.error('Error loading folders:', error);
+                    return [];
+                }
+            }
+
+            // الحصول على عرض الدور
+            getRoleDisplay() {
+                if (this.userData.role === 'admin') {
+                    return 'الدور: مسؤول';
+                } else if (this.userData.role === 'owner') {
+                    return 'الدور: مالك النظام';
+                } else {
+                    return `التخصص: ${this.getSpecializationName(this.userData.specialization)}`;
+                }
+            }
+
+            // الحصول على المواد حسب التخصص
+            getSubjectsBySpecialization(spec) {
+                const subjects = {
+                    science: [
+                        { name: 'الكيمياء', description: 'دراسة المادة وخصائصها' },
+                        { name: 'الفيزياء', description: 'دراسة القوانين الطبيعية' },
+                        { name: 'الأحياء', description: 'دراسة الكائنات الحية' },
+                        { name: 'اللغة العربية', description: 'قواعد وأدب عربي' },
+                        { name: 'اللغة الإنجليزية', description: 'English Language' }
+                    ],
+                    math: [
+                        { name: 'الرياضيات', description: 'جبر وهندسة وحساب مثلثات' },
+                        { name: 'الفيزياء', description: 'دراسة القوانين الطبيعية' },
+                        { name: 'الكيمياء', description: 'دراسة المادة وخصائصها' },
+                        { name: 'اللغة العربية', description: 'قواعد وأدب عربي' },
+                        { name: 'اللغة الإنجليزية', description: 'English Language' }
+                    ],
+                    literary: [
+                        { name: 'التاريخ', description: 'تاريخ العالم والعرب' },
+                        { name: 'الجغرافيا', description: 'دراسة الأرض والظواهر الطبيعية' },
+                        { name: 'الفلسفة', description: 'منطق وفلسفة' },
+                        { name: 'علم النفس', description: 'دراسة السلوك البشري' },
+                        { name: 'اللغة العربية', description: 'قواعد وأدب عربي' }
+                    ],
+                    admin: [
+                        { name: 'الكيمياء', description: 'دراسة المادة وخصائصها' },
+                        { name: 'الفيزياء', description: 'دراسة القوانين الطبيعية' },
+                        { name: 'الرياضيات', description: 'جبر وهندسة وحساب مثلثات' },
+                        { name: 'التاريخ', description: 'تاريخ العالم والعرب' },
+                        { name: 'اللغة العربية', description: 'قواعد وأدب عربي' }
+                    ],
+                    owner: [
+                        { name: 'الكيمياء', description: 'دراسة المادة وخصائصها' },
+                        { name: 'الفيزياء', description: 'دراسة القوانين الطبيعية' },
+                        { name: 'الرياضيات', description: 'جبر وهندسة وحساب مثلثات' },
+                        { name: 'التاريخ', description: 'تاريخ العالم والعرب' },
+                        { name: 'اللغة العربية', description: 'قواعد وأدب عربي' }
+                    ]
+                };
+
+                return subjects[spec] || [];
+            }
+
+            // الحصول على قائمة المواد
+            getSubjectsList() {
+                const allSubjects = [
+                    'الكيمياء', 'الفيزياء', 'الأحياء', 'الرياضيات', 
+                    'التاريخ', 'الجغرافيا', 'الفلسفة', 'علم النفس', 
+                    'اللغة العربية', 'اللغة الإنجليزية'
+                ];
+                
+                return allSubjects;
+            }
+
+            // الحصول على اسم التخصص
+            getSpecializationName(spec) {
+                const names = {
+                    science: 'علمي علوم',
+                    math: 'علمي رياضة',
+                    literary: 'أدبي',
+                    admin: 'مسؤول',
+                    owner: 'مالك النظام'
+                };
+                return names[spec] || spec;
+            }
+
+            // معالجة تسجيل الخروج
+            async handleLogout() {
+                try {
+                    await signOut(auth);
+                } catch (error) {
+                    console.error('Error signing out:', error);
+                }
+            }
+
+            // ترجمة أخطاء الفايربيز
+            getAuthErrorMessage(errorCode) {
+                const messages = {
+                    'auth/invalid-email': 'البريد الإلكتروني غير صالح',
+                    'auth/user-disabled': 'هذا الحساب معطل',
+                    'auth/user-not-found': 'لا يوجد حساب بهذا البريد',
+                    'auth/wrong-password': 'كلمة المرور غير صحيحة',
+                    'auth/email-already-in-use': 'هذا البريد مسجل بالفعل',
+                    'auth/weak-password': 'كلمة المرور ضعيفة جداً',
+                    'auth/operation-not-allowed': 'عملية غير مسموح بها'
+                };
+                
+                return messages[errorCode] || 'حدث خطأ غير متوقع';
+            }
+        }
+
+        // بدء التطبيق
+        const portal = new StudentPortal();
+    </script>
+</body>
+</html>
