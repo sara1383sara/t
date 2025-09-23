@@ -3,70 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنnnصات</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>بوابة الطالب</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="app">
-        <!-- المحتوى هيظهر هنا ديناميكي -->
-    </div>
-
-    <!-- نافذة إضافة المحتوى -->
-    <div id="contentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="contentModalTitle">إضافة محتوى جديد</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="contentForm">
-                <div class="form-group">
-                    <label for="contentType">نوع المحتوى:</label>
-                    <select id="contentType" required>
-                        <option value="">اختر النوع</option>
-                        <option value="folder">مجلد</option>
-                        <option value="video">فيديو يوتيوب</option>
-                        <option value="link">رابط</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="contentName">اسم المحتوى:</label>
-                    <input type="text" id="contentName" required>
-                </div>
-                <div class="form-group" id="urlField" style="display: none;">
-                    <label for="contentUrl">الرابط:</label>
-                    <input type="url" id="contentUrl" placeholder="https://...">
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-secondary close-modal">إلغاء</button>
-                    <button type="submit" class="btn-primary">حفظ</button>
-                </div>
-            </form>
+        <div class="loading">
+            <h1>جاري التحميل...</h1>
         </div>
     </div>
 
-    <!-- نافذة تعديل المجلد -->
-    <div id="folderModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="folderModalTitle">تعديل المجلد</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <form id="folderForm">
-                <div class="form-group">
-                    <label for="editFolderName">اسم المجلد:</label>
-                    <input type="text" id="editFolderName" required>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-secondary close-modal">إلغاء</button>
-                    <button type="submit" class="btn-primary">حفظ التغييرات</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script type="module" src="./app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
-
-
-
