@@ -88,7 +88,8 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 12px;
             background: #2d2d3d;
@@ -100,7 +101,8 @@
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #4a8cff;
         }
@@ -113,8 +115,7 @@
         }
 
         .btn-primary {
-            width: 100%;
-            padding: 12px;
+            padding: 12px 24px;
             background: linear-gradient(135deg, #4a8cff 0%, #2a5cb0 100%);
             color: white;
             border: none;
@@ -141,6 +142,20 @@
 
         .btn-secondary:hover {
             background: #444;
+        }
+
+        .btn-danger {
+            padding: 8px 16px;
+            background: #dc2626;
+            color: white;
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
         }
 
         .message {
@@ -266,41 +281,43 @@
 
         .folder-management {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
         .folder-item {
             background: #2d2d3d;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 10px;
             border: 1px solid #444;
         }
 
         .folder-item h4 {
             color: #4a8cff;
             margin-bottom: 10px;
+            font-size: 18px;
         }
 
         .folder-actions {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .folder-content {
-            margin-top: 10px;
-            padding: 10px;
+            margin-top: 15px;
+            padding: 15px;
             background: #1e1e2e;
-            border-radius: 5px;
+            border-radius: 8px;
         }
 
         .content-item {
             background: #2d2d3d;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -308,7 +325,58 @@
 
         .content-actions {
             display: flex;
-            gap: 5px;
+            gap: 8px;
+        }
+
+        /* النوافذ المنبثقة */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1e1e2e;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #4a8cff;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
         }
 
         /* responsive */
@@ -330,12 +398,79 @@
             .folder-management {
                 grid-template-columns: 1fr;
             }
+            
+            .folder-actions {
+                flex-direction: column;
+            }
+            
+            .content-item {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .content-actions {
+                align-self: flex-end;
+            }
         }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- المحتوى هيظهر هنا ديناميكي -->
+    </div>
+
+    <!-- نافذة إضافة المحتوى -->
+    <div id="contentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="contentModalTitle">إضافة محتوى جديد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="contentForm">
+                <div class="form-group">
+                    <label for="contentType">نوع المحتوى:</label>
+                    <select id="contentType" required>
+                        <option value="">اختر النوع</option>
+                        <option value="folder">مجلد</option>
+                        <option value="video">فيديو يوتيوب</option>
+                        <option value="link">رابط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contentName">اسم المحتوى:</label>
+                    <input type="text" id="contentName" required>
+                </div>
+                <div class="form-group" id="urlField" style="display: none;">
+                    <label for="contentUrl">الرابط:</label>
+                    <input type="url" id="contentUrl" placeholder="https://...">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل المجلد -->
+    <div id="folderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="folderModalTitle">تعديل المجلد</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="folderForm">
+                <div class="form-group">
+                    <label for="editFolderName">اسم المجلد:</label>
+                    <input type="text" id="editFolderName" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary close-modal">إلغاء</button>
+                    <button type="submit" class="btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script type="module">
@@ -368,7 +503,9 @@
             deleteDoc,
             collection,
             getDocs,
-            addDoc
+            addDoc,
+            arrayUnion,
+            arrayRemove
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // Initialize Firebase
@@ -380,6 +517,8 @@
             constructor() {
                 this.currentUser = null;
                 this.userData = null;
+                this.currentFolderId = null;
+                this.currentContentId = null;
                 this.init();
             }
 
@@ -392,6 +531,54 @@
                     } else {
                         this.showLoginPage();
                     }
+                });
+
+                // إعداد أحداث النوافذ المنبثقة
+                this.setupModals();
+            }
+
+            // إعداد النوافذ المنبثقة
+            setupModals() {
+                // إغلاق النوافذ عند النقر على X أو خارج المحتوى
+                document.querySelectorAll('.close-modal').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.modal').forEach(modal => {
+                            modal.style.display = 'none';
+                        });
+                    });
+                });
+
+                // إغلاق النوافذ عند النقر خارج المحتوى
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            modal.style.display = 'none';
+                        }
+                    });
+                });
+
+                // تغيير عرض حقل الرابط بناءً على نوع المحتوى
+                document.getElementById('contentType').addEventListener('change', (e) => {
+                    const urlField = document.getElementById('urlField');
+                    if (e.target.value === 'video' || e.target.value === 'link') {
+                        urlField.style.display = 'block';
+                        document.getElementById('contentUrl').required = true;
+                    } else {
+                        urlField.style.display = 'none';
+                        document.getElementById('contentUrl').required = false;
+                    }
+                });
+
+                // إرسال نموذج إضافة المحتوى
+                document.getElementById('contentForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addContentToFolder();
+                });
+
+                // إرسال نموذج تعديل المجلد
+                document.getElementById('folderForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.updateFolder();
                 });
             }
 
@@ -733,7 +920,7 @@
                 document.querySelectorAll('.btn-primary[data-subject]').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const subject = e.target.dataset.subject;
-                        this.showSubjectContent(subject, folders);
+                        this.showSubjectContent(subject);
                     });
                 });
 
@@ -744,7 +931,8 @@
             }
 
             // عرض محتوى المادة
-            showSubjectContent(subjectName, folders) {
+            async showSubjectContent(subjectName) {
+                const folders = await this.loadFolders();
                 const subjectFolders = folders.filter(folder => folder.subject === subjectName);
                 
                 const app = document.getElementById('app');
@@ -763,7 +951,10 @@
                             
                             <h2>محتوى ${subjectName}</h2>
                             <div class="folder-management">
-                                ${subjectFolders.map(folder => this.renderFolder(folder)).join('')}
+                                ${subjectFolders.length > 0 ? 
+                                    subjectFolders.map(folder => this.renderFolder(folder)).join('') : 
+                                    '<p style="text-align: center; color: #aaa;">لا توجد مجلدات لهذه المادة بعد</p>'
+                                }
                             </div>
                         </main>
                     </div>
@@ -791,36 +982,38 @@
                         ${this.userData.role === 'admin' || this.userData.role === 'owner' ? `
                             <div class="folder-actions">
                                 <button class="btn-secondary edit-folder">تعديل</button>
-                                <button class="btn-secondary delete-folder">حذف</button>
+                                <button class="btn-danger delete-folder">حذف</button>
                                 <button class="btn-primary add-content">إضافة محتوى</button>
                             </div>
                         ` : ''}
                         <div class="folder-content">
-                            ${folder.content ? folder.content.map(item => this.renderContentItem(item)).join('') : ''}
+                            ${folder.content && folder.content.length > 0 ? 
+                                folder.content.map(item => this.renderContentItem(item, folder.id)).join('') : 
+                                '<p style="text-align: center; color: #888;">لا يوجد محتوى في هذا المجلد بعد</p>'
+                            }
                         </div>
                     </div>
                 `;
             }
 
             // عرض عنصر المحتوى
-            renderContentItem(item) {
+            renderContentItem(item, folderId) {
                 let contentHtml = '';
                 
                 if (item.type === 'folder') {
                     contentHtml = `<span>📁 ${item.name}</span>`;
                 } else if (item.type === 'video') {
-                    contentHtml = `<span>🎥 ${item.name}</span> <a href="${item.url}" target="_blank">(رابط)</a>`;
+                    contentHtml = `<span>🎥 ${item.name}</span> <a href="${item.url}" target="_blank" style="color: #4a8cff;">(مشاهدة)</a>`;
                 } else if (item.type === 'link') {
-                    contentHtml = `<span>🔗 ${item.name}</span> <a href="${item.url}" target="_blank">(رابط)</a>`;
+                    contentHtml = `<span>🔗 ${item.name}</span> <a href="${item.url}" target="_blank" style="color: #4a8cff;">(فتح الرابط)</a>`;
                 }
                 
                 return `
                     <div class="content-item">
-                        ${contentHtml}
+                        <div>${contentHtml}</div>
                         ${this.userData.role === 'admin' || this.userData.role === 'owner' ? `
                             <div class="content-actions">
-                                <button class="btn-secondary edit-content" data-item-id="${item.id}">تعديل</button>
-                                <button class="btn-secondary delete-content" data-item-id="${item.id}">حذف</button>
+                                <button class="btn-danger delete-content" data-folder-id="${folderId}" data-item-id="${item.id}">حذف</button>
                             </div>
                         ` : ''}
                     </div>
@@ -855,15 +1048,18 @@
             // إعداد أحداث لوحة الإدارة
             setupAdminEvents() {
                 // إضافة مجلد
-                document.getElementById('addFolderBtn').addEventListener('click', () => {
-                    this.addFolder();
-                });
+                const addFolderBtn = document.getElementById('addFolderBtn');
+                if (addFolderBtn) {
+                    addFolderBtn.addEventListener('click', () => {
+                        this.addFolder();
+                    });
+                }
 
                 // تعديل مجلد
                 document.querySelectorAll('.edit-folder').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const folderId = e.target.closest('.folder-item').dataset.folderId;
-                        this.editFolder(folderId);
+                        this.showEditFolderModal(folderId);
                     });
                 });
 
@@ -871,7 +1067,9 @@
                 document.querySelectorAll('.delete-folder').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const folderId = e.target.closest('.folder-item').dataset.folderId;
-                        this.deleteFolder(folderId);
+                        if (confirm('هل أنت متأكد من حذف هذا المجلد؟')) {
+                            this.deleteFolder(folderId);
+                        }
                     });
                 });
 
@@ -883,19 +1081,14 @@
                     });
                 });
 
-                // تعديل محتوى
-                document.querySelectorAll('.edit-content').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const itemId = e.target.dataset.itemId;
-                        this.editContent(itemId);
-                    });
-                });
-
                 // حذف محتوى
                 document.querySelectorAll('.delete-content').forEach(btn => {
                     btn.addEventListener('click', (e) => {
+                        const folderId = e.target.dataset.folderId;
                         const itemId = e.target.dataset.itemId;
-                        this.deleteContent(itemId);
+                        if (confirm('هل أنت متأكد من حذف هذا المحتوى؟')) {
+                            this.deleteContent(folderId, itemId);
+                        }
                     });
                 });
             }
@@ -919,10 +1112,162 @@
                     });
 
                     alert('تم إضافة المجلد بنجاح');
-                    this.showDashboard();
+                    // إعادة تحميل المحتوى الحالي
+                    if (document.getElementById('backBtn')) {
+                        // إذا كنا في صفحة المادة، نعيد تحميلها
+                        const subjectName = document.querySelector('h1').textContent;
+                        this.showSubjectContent(subjectName);
+                    } else {
+                        // إذا كنا في الصفحة الرئيسية، نعيد تحميلها
+                        this.showDashboard();
+                    }
                 } catch (error) {
                     console.error('Error adding folder:', error);
                     alert('حدث خطأ أثناء إضافة المجلد');
+                }
+            }
+
+            // عرض نافذة تعديل المجلد
+            async showEditFolderModal(folderId) {
+                try {
+                    const folderDoc = await getDoc(doc(db, 'folders', folderId));
+                    if (folderDoc.exists()) {
+                        const folderData = folderDoc.data();
+                        document.getElementById('editFolderName').value = folderData.name;
+                        this.currentFolderId = folderId;
+                        
+                        document.getElementById('folderModal').style.display = 'flex';
+                    }
+                } catch (error) {
+                    console.error('Error loading folder data:', error);
+                    alert('حدث خطأ أثناء تحميل بيانات المجلد');
+                }
+            }
+
+            // تحديث المجلد
+            async updateFolder() {
+                const newName = document.getElementById('editFolderName').value;
+
+                if (!newName) {
+                    alert('الرجاء إدخال اسم للمجلد');
+                    return;
+                }
+
+                try {
+                    await updateDoc(doc(db, 'folders', this.currentFolderId), {
+                        name: newName
+                    });
+
+                    document.getElementById('folderModal').style.display = 'none';
+                    alert('تم تحديث المجلد بنجاح');
+                    
+                    // إعادة تحميل المحتوى الحالي
+                    if (document.getElementById('backBtn')) {
+                        const subjectName = document.querySelector('h1').textContent;
+                        this.showSubjectContent(subjectName);
+                    } else {
+                        this.showDashboard();
+                    }
+                } catch (error) {
+                    console.error('Error updating folder:', error);
+                    alert('حدث خطأ أثناء تحديث المجلد');
+                }
+            }
+
+            // حذف المجلد
+            async deleteFolder(folderId) {
+                try {
+                    await deleteDoc(doc(db, 'folders', folderId));
+                    alert('تم حذف المجلد بنجاح');
+                    
+                    // إعادة تحميل المحتوى الحالي
+                    if (document.getElementById('backBtn')) {
+                        const subjectName = document.querySelector('h1').textContent;
+                        this.showSubjectContent(subjectName);
+                    } else {
+                        this.showDashboard();
+                    }
+                } catch (error) {
+                    console.error('Error deleting folder:', error);
+                    alert('حدث خطأ أثناء حذف المجلد');
+                }
+            }
+
+            // عرض نافذة إضافة المحتوى
+            showAddContentModal(folderId) {
+                this.currentFolderId = folderId;
+                document.getElementById('contentModalTitle').textContent = 'إضافة محتوى جديد';
+                document.getElementById('contentForm').reset();
+                document.getElementById('urlField').style.display = 'none';
+                document.getElementById('contentModal').style.display = 'flex';
+            }
+
+            // إضافة محتوى إلى المجلد
+            async addContentToFolder() {
+                const type = document.getElementById('contentType').value;
+                const name = document.getElementById('contentName').value;
+                const url = document.getElementById('contentUrl').value;
+
+                if (!type || !name) {
+                    alert('الرجاء إدخال جميع البيانات المطلوبة');
+                    return;
+                }
+
+                if ((type === 'video' || type === 'link') && !url) {
+                    alert('الرجاء إدخال الرابط');
+                    return;
+                }
+
+                try {
+                    const newContent = {
+                        id: Date.now().toString(), // إنشاء معرف فريد
+                        type: type,
+                        name: name,
+                        url: url || '',
+                        createdAt: new Date()
+                    };
+
+                    await updateDoc(doc(db, 'folders', this.currentFolderId), {
+                        content: arrayUnion(newContent)
+                    });
+
+                    document.getElementById('contentModal').style.display = 'none';
+                    alert('تم إضافة المحتوى بنجاح');
+                    
+                    // إعادة تحميل المحتوى الحالي
+                    if (document.getElementById('backBtn')) {
+                        const subjectName = document.querySelector('h1').textContent;
+                        this.showSubjectContent(subjectName);
+                    }
+                } catch (error) {
+                    console.error('Error adding content:', error);
+                    alert('حدث خطأ أثناء إضافة المحتوى');
+                }
+            }
+
+            // حذف المحتوى من المجلد
+            async deleteContent(folderId, itemId) {
+                try {
+                    const folderDoc = await getDoc(doc(db, 'folders', folderId));
+                    if (folderDoc.exists()) {
+                        const folderData = folderDoc.data();
+                        const updatedContent = folderData.content.filter(item => item.id !== itemId);
+                        
+                        await updateDoc(doc(db, 'folders', folderId), {
+                            content: updatedContent
+                        });
+
+                        alert('تم حذف المحتوى بنجاح');
+                        
+                        // إعادة تحميل المحتوى الحالي
+                        if (document.getElementById('backBtn')) {
+                            const subjectName = document.querySelector('h1').textContent;
+                            this.showSubjectContent(subjectName);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error deleting content:', error);
+                    alert('حدث خطأ أثناء حذف المحتوى');
                 }
             }
 
